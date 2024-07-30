@@ -45,9 +45,14 @@ const Home = () => {
       <div className="border rounded-lg p-8 mt-[3rem] max-w-[60rem] w-11/12 mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-2xl font-bold uppercase">Welcome</h2>
-          <span className="py-1 px-5 bg-black/50 text-white uppercase rounded-md font-bold">
-            {currentUser.type}
-          </span>
+          <div>
+            <span className="py-1 px-5 bg-black/50 text-white uppercase rounded-md font-bold">
+              {currentUser.type}
+            </span>
+            <Button size="sm" className="py-0">
+              Logout
+            </Button>
+          </div>
         </div>
         <div className="w-full">
           <h3 className="grid grid-cols-[8rem,1fr] gap-3">
@@ -68,9 +73,11 @@ const Home = () => {
             </div>
           </h3>
 
-          <Button className="mt-8" onClick={contractHandler}>
-            View Contracts
-          </Button>
+          {!showContracts && (
+            <Button className="mt-8" onClick={contractHandler}>
+              View Contracts
+            </Button>
+          )}
         </div>
 
         {showContracts &&
