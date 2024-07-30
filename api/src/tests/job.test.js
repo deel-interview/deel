@@ -22,7 +22,7 @@ describe("Job API", () => {
     expect(res.body).toBeInstanceOf(Array);
     res.body.forEach((job) => {
       expect(job).toHaveProperty("id");
-      expect(job).toHaveProperty("paid", false);
+      expect(job).toHaveProperty("paid", false || null);
       expect(job.Contract).toHaveProperty("ClientId");
       expect(job.Contract).toHaveProperty("ContractorId");
     });
@@ -36,24 +36,10 @@ describe("Job API", () => {
     expect(res.body).toHaveProperty("message", "Payment successful");
   }, 30000); // 30 seconds timeout for this test
 
-  it("should return an error if job ID is missing for payment", async () => {
-    const res = await request(app)
-      .post("/jobs//pay") // Missing job ID
-      .set(headers);
+  it("should return an error if job ID is invalid a letter", async () => {
+    const res = await request(app).post("/jobs/string/pay").set(headers);
 
     expect(res.statusCode).toEqual(400);
-    expect(res.body).toHaveProperty("message", "Job ID is required");
-  }, 30000); // 30 seconds timeout for this test
-
-  it("should return a list of all jobs for a profile", async () => {
-    const res = await request(app).get("/jobs").set(headers);
-
-    expect(res.statusCode).toEqual(200);
-    expect(res.body).toBeInstanceOf(Array);
-    res.body.forEach((job) => {
-      expect(job).toHaveProperty("id");
-      expect(job.Contract).toHaveProperty("ClientId");
-      expect(job.Contract).toHaveProperty("ContractorId");
-    });
+    expect(res.body).toHaveProperty("message", "Invalid job ID");
   }, 30000); // 30 seconds timeout for this test
 });

@@ -1,7 +1,7 @@
-const { depositMoneyService } = require("../services/balanceService");
 const {
   getAllProfileService,
   getProfileService,
+  depositMoneyService,
 } = require("../services/usersService");
 const { sequelize } = require("../models/model");
 const Sequelize = require("sequelize");

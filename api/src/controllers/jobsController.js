@@ -37,10 +37,15 @@ const getUnpaidJobs = async (req, res) => {
 
 const payForJob = async (req, res) => {
   const { job_id: jobId } = req.params;
+  console.log("jobId: ", jobId);
   const { id: clientId } = req.profile.dataValues;
 
   if (!jobId) {
     return res.status(400).json({ message: "Job ID is required" });
+  }
+  //make sure thr jonId is a number
+  if (isNaN(jobId)) {
+    return res.status(400).json({ message: "Invalid job ID" });
   }
 
   try {
