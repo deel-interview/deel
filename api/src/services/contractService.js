@@ -2,8 +2,6 @@ const { Contract, Profile, Job, sequelize } = require("../models/model");
 const Sequelize = require("sequelize");
 
 const findContractById = async (id, profileId, options = {}) => {
-  console.log("profileIdcc: ", profileId);
-
   const result = await Contract.findOne({
     where: {
       id,
@@ -27,17 +25,16 @@ const findContractById = async (id, profileId, options = {}) => {
     ],
     transaction: options.transaction,
   });
-  console.log(result);
+
   if (!result) {
     throw new Error(
-      "Could not find the contract or the contract does not belong to this profile"
+      "NOT FOUND : Could not find the contract or the contract does not belong to this profile"
     );
   }
   return result;
 };
 
 const findAllContract = async (profileId, options = {}) => {
-  console.log("profileId: ", profileId);
   try {
     const result = await Contract.findAll({
       where: {

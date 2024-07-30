@@ -25,7 +25,7 @@ const getContracts = async (req, res) => {
   } catch (error) {
     console.log("error: ", error);
     await transaction.rollback();
-    return res.status(501).json({ message: "somthing went wrong" });
+    return res.status(501).json({ message: "something went wrong" });
   }
 
   if (!result) {
@@ -50,13 +50,11 @@ const getContractById = async (req, res) => {
   });
   try {
     result = await findContractById(id, profile.id, { transaction });
-    console.log("ttttt");
-    console.log(result);
     await transaction.commit();
   } catch (error) {
     console.log("error: ", error);
     await transaction.rollback();
-    return res.status(401).json({ message: error.message });
+    return res.status(404).json({ message: error.message });
   }
   if (!result) {
     await transaction.commit();
