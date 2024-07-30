@@ -24,7 +24,7 @@ export const getProfileDetails = async (id: string) => {
       profile_id: id,
     },
   });
-  // console.log(res);
+  console.log(res);
   if (!res.ok) {
     throw new Error("Failed to get profile details");
   }

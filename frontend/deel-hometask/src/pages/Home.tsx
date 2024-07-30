@@ -35,11 +35,10 @@ const Home = () => {
 
   useEffect(() => {
     const user = getUser();
-
     if (user) {
       getUserProfile(user);
     }
-  }, [getUserProfile, getUser]);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("deel-user");

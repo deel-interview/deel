@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ContractTypes, User } from "../types";
-import { getContracts, getUser } from "../services";
+import { getContracts, getProfileDetails, getUser } from "../services";
 import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
@@ -29,11 +29,22 @@ const ContractsPage = () => {
       toast.error("Something went wrong");
     }
   };
+
+  const getUserProfile = async (id: string) => {
+    console.log(id);
+    try {
+      const res = await getProfileDetails(id);
+      //   console.log(res);
+      setCurrentUser(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     const user = getUser();
     if (user) {
       contractHandler(parseInt(user));
-      //   setCurrentUser(user);
+      getUserProfile(user);
     }
   }, [getUser]);
 
@@ -41,7 +52,7 @@ const ContractsPage = () => {
     <div className="border rounded-lg p-8 mt-[3rem] max-w-[80rem] w-11/12 mx-auto">
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-2xl font-bold uppercase">
-          {/* Welcome, {currentUser.firstName} {currentUser.lastName} */}
+          Welcome, {currentUser.firstName} {currentUser.lastName}
         </h2>
         <div className="flex items-center gap-2">
           <span className="py-1 px-5 bg-black/30 text-white uppercase rounded-md font-bold">
