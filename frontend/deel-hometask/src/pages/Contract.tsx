@@ -157,7 +157,7 @@ const Contract = () => {
 
                         <td>{job.description}</td>
                         <td>{formatCurrency(job.price)}</td>
-                        <td>{job.paid ? "True" : "False"}</td>
+                        <td>{job.paid ? "Paid" : "Unpaid"}</td>
                         <td>{job.paymentDate?.split("T")[0] ?? "N/A"}</td>
                         {currentUser?.type === "client" && (
                           <td className="p-4">
@@ -183,7 +183,7 @@ const Contract = () => {
             ) : (
               <div className="mt-8">
                 <h2 className="text-neutral-600 italic">
-                  You have no active contracts
+                  You have no active jobs
                 </h2>
               </div>
             )}

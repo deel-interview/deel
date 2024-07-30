@@ -59,7 +59,9 @@ const Home = () => {
       return;
     }
     try {
-      const res = await addBalance({ amount, userId: currentUser.id! });
+      await addBalance({ amount, userId: currentUser.id! });
+      setShowModal(false);
+      navigate(0);
     } catch (error) {
       //@ts-ignore
       toast.error(error.message);
@@ -108,10 +110,14 @@ const Home = () => {
               )}
             </div>
           </h3>
-
-          <Button className="mt-8" asChild>
-            <Link to="/contracts">View Contracts</Link>
-          </Button>
+          <div className="space-x-4">
+            <Button className="mt-8" asChild>
+              <Link to="/contracts">View Contracts</Link>
+            </Button>
+            <Button className="mt-8" asChild>
+              <Link to="/jobs">View Unpaid Job</Link>
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -136,7 +142,9 @@ const Home = () => {
             </div>
           </div>
           <DialogFooter>
-            <Button type="button">Add</Button>
+            <Button type="button" onClick={addBalanceHandler}>
+              Add
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

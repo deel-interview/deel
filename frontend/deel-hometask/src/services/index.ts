@@ -112,14 +112,15 @@ export const addBalance = async ({
   amount: string;
   userId: number;
 }) => {
-  const res = await fetch(`${BASE_URL}/jobs/${amount}/pay`, {
+  const res = await fetch(`${BASE_URL}/users/deposit/${userId.toString()}`, {
     method: "POST",
-    cache: "no-store",
     headers: {
       profile_id: userId.toString(),
+      "Content-Type": "application/json",
     },
-    body: "Test body",
+    body: JSON.stringify({ amount }),
   });
+
   const data = await res.json();
 
   if (!res.ok) {
