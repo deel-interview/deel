@@ -5,6 +5,7 @@ import { ContractTypes, User } from "../types";
 import { toast, Toaster } from "sonner";
 import { Link } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
+import { CirclePlus, Ghost } from "lucide-react";
 
 const Home = () => {
   const [currentUser, setCurrentUser] = useState<User>({
@@ -38,14 +39,12 @@ const Home = () => {
     }
   };
 
-  console.log(contracts[0]);
-
   return (
     <>
       <Toaster position="top-right" />
-      <div className="border rounded-lg p-8 mt-[3rem] max-w-[45rem] w-11/12 mx-auto">
+      <div className="border rounded-lg p-8 mt-[3rem] max-w-[60rem] w-11/12 mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-base font-bold uppercase">Welcome</h2>
+          <h2 className="text-2xl font-bold uppercase">Welcome</h2>
           <span className="py-1 px-5 bg-black/50 text-white uppercase rounded-md font-bold">
             {currentUser.type}
           </span>
@@ -62,8 +61,8 @@ const Home = () => {
             <div className="capitalize flex items-center gap-8">
               <span className="text-xl">${currentUser.balance}</span>{" "}
               {currentUser?.type?.toLowerCase() === "client" && (
-                <Button className="py-0 px-3 h-7" size="sm">
-                  Add
+                <Button className="py-0 px-3 h-7" size="sm" variant="ghost">
+                  <CirclePlus />
                 </Button>
               )}
             </div>
@@ -85,6 +84,7 @@ const Home = () => {
 
                     <th className="p-2">Status</th>
                     <th className="p-2">Term</th>
+                    <th className="p-2">Contractor</th>
                     <th className="p-2"></th>
                   </tr>
                 </thead>
@@ -97,6 +97,10 @@ const Home = () => {
 
                       <td>{contract.status}</td>
                       <td>{contract.terms}</td>
+                      <td>
+                        {contract.Contractor.firstName}{" "}
+                        {contract.Contractor.lastName}
+                      </td>
                       <td className="p-4">
                         <Link
                           to={`/contracts/${contract.id}`}

@@ -1,4 +1,4 @@
-const { Contract, Profile, Job } = require("../models/model");
+const { Contract, Profile, Job, sequelize } = require("../models/model");
 const Sequelize = require("sequelize");
 
 const findContractById = async (id, profileId, options = {}) => {
@@ -9,7 +9,22 @@ const findContractById = async (id, profileId, options = {}) => {
       id,
       [Sequelize.Op.or]: [{ clientId: profileId }, { contractorId: profileId }],
     },
-    include: { model: Job },
+    include: [
+      {
+        model: Profile,
+        as: "Client",
+        attributes: ["id", "lastName", "firstName"],
+      },
+      {
+        model: Profile,
+        as: "Contractor",
+        attributes: ["id", "lastName", "firstName"],
+      },
+      {
+        model: Job,
+        as: "Jobs",
+      },
+    ],
     transaction: options.transaction,
   });
   console.log(result);
@@ -32,7 +47,18 @@ const findAllContract = async (profileId, options = {}) => {
           { contractorId: profileId },
         ],
       },
+
       include: [
+        {
+          model: Profile,
+          as: "Client",
+          attributes: ["id", "lastName", "firstName"],
+        },
+        {
+          model: Profile,
+          as: "Contractor",
+          attributes: ["id", "lastName", "firstName"],
+        },
         {
           model: Job,
           as: "Jobs",

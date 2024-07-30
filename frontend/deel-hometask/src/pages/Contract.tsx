@@ -33,7 +33,7 @@ const Contract = () => {
           userId: currentUser.id!,
           contractId: id!,
         });
-        // console.log(res);
+        console.log(res);
         setContractData(res);
       } catch (error) {}
     };

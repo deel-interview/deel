@@ -9,9 +9,26 @@ export interface User {
   updatedAt: string;
 }
 
+interface Person {
+  id: number;
+  firstName: string;
+  lastName: string;
+}
+
+interface Job {
+  id: number;
+  description: string;
+  price: number;
+  paid: boolean | null;
+  paymentDate: string | null;
+}
+
 export interface ContractTypes {
+  Client: Person;
   ClientId: number;
+  Contractor: Person;
   ContractorId: number;
+  Jobs: Job[];
   createdAt: string;
   id: number;
   status: string;
