@@ -14,6 +14,20 @@ const getAllProfileService = async (options = {}) => {
   }
 };
 
+const getProfileService = async (id, options = {}) => {
+  try {
+    return await Profile.findAll({
+      where: { id },
+      transaction: options.transaction,
+    });
+    //the transaction will be committed by a higher level function
+  } catch (error) {
+    console.error(`An error occurred: ${error.message}`);
+    throw error;
+  }
+};
+
 module.exports = {
   getAllProfileService,
+  getProfileService,
 };
