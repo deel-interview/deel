@@ -67,9 +67,10 @@ const Contract = () => {
     setPayLoading(id);
     try {
       const res = await payforJob({ id: id, userId: currentUser.id! });
-      console.log(res);
-      navigate(0);
-      // window.location.reload();
+      toast.success(res.message);
+      setTimeout(() => {
+        navigate(0);
+      }, 500);
     } catch (error) {
       //@ts-ignore
       toast.error(error?.message);

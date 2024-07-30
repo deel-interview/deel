@@ -8,10 +8,11 @@ export const getProfile = async () => {
       profile_id: "1",
     },
   });
-  if (!res.ok) {
-    throw new Error("Failed to get profile");
-  }
   const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.message);
+  }
 
   return data;
 };
@@ -24,11 +25,12 @@ export const getProfileDetails = async (id: string) => {
       profile_id: id,
     },
   });
-  console.log(res);
-  if (!res.ok) {
-    throw new Error("Failed to get profile details");
-  }
+
   const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.message);
+  }
 
   return data;
 };
@@ -47,11 +49,11 @@ export const getContracts = async (id: number) => {
     },
   });
 
-  if (!res.ok) {
-    throw new Error("Failed to get contract");
-  }
-
   const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.message);
+  }
 
   return data;
 };
@@ -70,10 +72,11 @@ export const getContractDetails = async ({
       profile_id: userId.toString(),
     },
   });
-  if (!res.ok) {
-    throw new Error("Failed to get contract");
-  }
   const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.message);
+  }
 
   return data;
 };
@@ -85,7 +88,6 @@ export const payforJob = async ({
   id: number;
   userId: number;
 }) => {
-  console.log(userId);
   const res = await fetch(`${BASE_URL}/jobs/${id}/pay`, {
     method: "POST",
     cache: "no-store",
@@ -94,11 +96,35 @@ export const payforJob = async ({
     },
     body: "Test body",
   });
+  const data = await res.json();
 
   if (!res.ok) {
-    throw new Error("Failed to pay");
+    throw new Error(data.message);
   }
+
+  return data;
+};
+
+export const addBalance = async ({
+  amount,
+  userId,
+}: {
+  amount: string;
+  userId: number;
+}) => {
+  const res = await fetch(`${BASE_URL}/jobs/${amount}/pay`, {
+    method: "POST",
+    cache: "no-store",
+    headers: {
+      profile_id: userId.toString(),
+    },
+    body: "Test body",
+  });
   const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.message);
+  }
 
   return data;
 };

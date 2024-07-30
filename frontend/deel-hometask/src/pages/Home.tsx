@@ -1,12 +1,20 @@
 import { useEffect, useState } from "react";
-import { Button, buttonVariants } from "../components/ui/button";
-import { getContracts, getProfileDetails, getUser } from "../services";
-import { ContractTypes, User } from "../types";
+import { Button } from "../components/ui/button";
+import { addBalance, getProfileDetails, getUser } from "../services";
+import { User } from "../types";
 import { toast, Toaster } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
 
 import { CirclePlus } from "lucide-react";
 import { formatCurrency } from "../lib/utils";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../components/ui/dialog";
+import { Input } from "../components/ui/input";
 
 const Home = () => {
   const [currentUser, setCurrentUser] = useState<User>({
@@ -19,17 +27,18 @@ const Home = () => {
     createdAt: "",
     updatedAt: "",
   });
+  const [showModal, setShowModal] = useState(false);
+  const [amount, setAmount] = useState<string>();
 
   const navigate = useNavigate();
 
   const getUserProfile = async (id: string) => {
-    console.log(id);
     try {
       const res = await getProfileDetails(id);
-      console.log(res);
       setCurrentUser(res);
     } catch (error) {
-      console.log(error);
+      //@ts-ignore
+      toast.error(error.message);
     }
   };
 
@@ -45,10 +54,22 @@ const Home = () => {
     navigate("/login");
   };
 
+  const addBalanceHandler = async () => {
+    if (!amount) {
+      return;
+    }
+    try {
+      const res = await addBalance({ amount, userId: currentUser.id! });
+    } catch (error) {
+      //@ts-ignore
+      toast.error(error.message);
+    }
+  };
+
   return (
     <>
       <Toaster position="top-right" richColors />
-      <div className="border rounded-lg p-8 mt-[3rem] max-w-[80rem] w-11/12 mx-auto">
+      <div className="border rounded-lg p-8 mt-[3rem] max-w-[50rem] w-11/12 mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-2xl font-bold uppercase">
             Welcome, {currentUser.firstName} {currentUser.lastName}
@@ -76,7 +97,12 @@ const Home = () => {
                 {formatCurrency(currentUser.balance!)}
               </span>{" "}
               {currentUser?.type?.toLowerCase() === "client" && (
-                <Button className="py-0 px-3 h-7" size="sm" variant="ghost">
+                <Button
+                  className="py-0 px-3 h-7"
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => setShowModal(true)}
+                >
                   <CirclePlus />
                 </Button>
               )}
@@ -88,6 +114,32 @@ const Home = () => {
           </Button>
         </div>
       </div>
+
+      {/* HDR: MODAL */}
+      <Dialog onOpenChange={() => setShowModal(false)} open={showModal}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Add to your Balance</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <label htmlFor="amount" className="text-right">
+                Amount
+              </label>
+              <Input
+                id="amount"
+                type="number"
+                className="col-span-3"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button type="button">Add</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };

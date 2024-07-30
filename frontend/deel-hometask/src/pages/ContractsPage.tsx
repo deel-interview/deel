@@ -34,7 +34,7 @@ const ContractsPage = () => {
     console.log(id);
     try {
       const res = await getProfileDetails(id);
-      //   console.log(res);
+      console.log(res);
       setCurrentUser(res);
     } catch (error) {
       console.log(error);
