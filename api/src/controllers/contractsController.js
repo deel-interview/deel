@@ -8,7 +8,7 @@ const Sequelize = require("sequelize");
 
 const getContracts = async (req, res) => {
   const { id } = req.profile.dataValues;
-  console.log("id: ", id);
+  // console.log("id: ", id);
 
   if (!id) {
     return res.status(401).json({ message: "authentication failed" });
@@ -23,7 +23,7 @@ const getContracts = async (req, res) => {
     result = await findAllContract(id, { transaction });
     await transaction.commit();
   } catch (error) {
-    console.log("error: ", error);
+    // console.log("error: ", error);
     await transaction.rollback();
     return res.status(501).json({ message: "something went wrong" });
   }
@@ -52,7 +52,7 @@ const getContractById = async (req, res) => {
     result = await findContractById(id, profile.id, { transaction });
     await transaction.commit();
   } catch (error) {
-    console.log("error: ", error);
+    // console.log("error: ", error);
     await transaction.rollback();
     return res.status(404).json({ message: error.message });
   }

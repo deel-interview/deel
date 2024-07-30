@@ -30,12 +30,12 @@ const Contract = () => {
   const navigate = useNavigate();
 
   const getUserProfile = async (id: string) => {
-    console.log(id);
     try {
       const res = await getProfileDetails(id);
       setCurrentUser(res);
     } catch (error) {
-      console.log(error);
+      //@ts-ignore
+      toast.error(error.message);
     }
   };
 
@@ -52,21 +52,26 @@ const Contract = () => {
     const getContracts = async () => {
       try {
         const res = await getContractDetails({
-          userId: currentUser.id!,
+          userId: String(currentUser.id)!,
           contractId: id!,
         });
 
         setContractData(res);
-      } catch (error) {}
+      } catch (error) {
+        //@ts-ignore
+        toast.error(error.message);
+      }
     };
 
-    getContracts();
+    if (currentUser.id) {
+      getContracts();
+    }
   }, [id, currentUser.id]);
 
   const payHandler = async (id: number) => {
     setPayLoading(id);
     try {
-      const res = await payforJob({ id: id, userId: currentUser.id! });
+      const res = await payforJob({ id: id, userId: String(currentUser.id)! });
       toast.success(res.message);
       setTimeout(() => {
         navigate(0);

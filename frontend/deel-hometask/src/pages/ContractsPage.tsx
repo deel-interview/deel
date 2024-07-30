@@ -21,7 +21,7 @@ const ContractsPage = () => {
 
   const [contracts, setContracts] = useState<ContractTypes[]>([]);
   const navigate = useNavigate();
-  const contractHandler = async (id: number) => {
+  const contractHandler = async (id: string) => {
     try {
       const res = await getContracts(id);
       setContracts(res);
@@ -31,22 +31,21 @@ const ContractsPage = () => {
   };
 
   const getUserProfile = async (id: string) => {
-    console.log(id);
     try {
       const res = await getProfileDetails(id);
-      console.log(res);
       setCurrentUser(res);
     } catch (error) {
-      console.log(error);
+      //@ts-ignore
+      toast.error(error.message);
     }
   };
   useEffect(() => {
     const user = getUser();
     if (user) {
-      contractHandler(parseInt(user));
+      contractHandler(user);
       getUserProfile(user);
     }
-  }, [getUser]);
+  }, []);
 
   return (
     <div className="border rounded-lg p-8 mt-[3rem] max-w-[80rem] w-11/12 mx-auto">

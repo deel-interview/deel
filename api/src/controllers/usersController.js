@@ -14,13 +14,11 @@ const depositMoney = async (req, res) => {
     return res.status(400).json({ message: "User ID is required" });
   }
   const { amount } = req.body;
-  console.log("Body", req.body);
+
   const profile = req.profile.dataValues;
   //make sure that the authenticated user is the one passing calling the function, that is userId must be equall to profile.id
   //the requirement did not explicitly say anything about the possibility of a client depositing for another clients, so yea.
   if (userId.toString() !== profile.id.toString()) {
-    console.log("profile.id: ", profile.id);
-    console.log("userId: ", userId);
     return res.status(401).json({
       message: "Unauthorized: You cannot deposit for another client.",
     });
@@ -36,7 +34,6 @@ const depositMoney = async (req, res) => {
   // since the this endpoint is for clients depositing money, we should make sure the person making the request is not a contractor,
   //if contractors are also meant to deposit, we will handle that separately, since the requirement did not state that, we will just assume that this is for clients only.
 
-  console.log("Amount", amount);
   if (!amount || parseFloat(amount) <= 0) {
     return res.status(400).json({ message: "Invalid deposit amount" });
   }
@@ -44,7 +41,7 @@ const depositMoney = async (req, res) => {
   try {
     //transactions are handled inside the service
     const newBalance = await depositMoneyService(userId, amount);
-    console.log(newBalance);
+
     res.json({ message: "Deposit successful", balance: newBalance });
   } catch (error) {
     console.error("Error depositing money: ", error);
@@ -67,7 +64,6 @@ const getProfiles = async (req, res) => {
     await transaction.commit();
     res.json(profiles);
   } catch (error) {
-    console.error("error: ", error);
     await transaction.rollback();
     res.status(500).json({ message: error.message });
   }
@@ -89,7 +85,6 @@ const getSingleProfiles = async (req, res) => {
     await transaction.commit();
     res.json(profiles);
   } catch (error) {
-    console.error("error: ", error);
     await transaction.rollback();
     res.status(500).json({ message: error.message });
   }

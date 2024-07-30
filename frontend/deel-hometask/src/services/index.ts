@@ -40,12 +40,12 @@ export const getUser = () => {
   return isUser && isUser;
 };
 
-export const getContracts = async (id: number) => {
+export const getContracts = async (id: string) => {
   const res = await fetch(`${BASE_URL}/contracts`, {
     method: "GET",
     cache: "no-store",
     headers: {
-      profile_id: id.toString(),
+      profile_id: id,
     },
   });
 
@@ -62,14 +62,14 @@ export const getContractDetails = async ({
   userId,
   contractId,
 }: {
-  userId: number;
+  userId: string;
   contractId: string;
 }) => {
   const res = await fetch(`${BASE_URL}/contracts/${contractId}`, {
     method: "GET",
     cache: "no-store",
     headers: {
-      profile_id: userId.toString(),
+      profile_id: userId,
     },
   });
   const data = await res.json();
@@ -86,13 +86,13 @@ export const payforJob = async ({
   userId,
 }: {
   id: number;
-  userId: number;
+  userId: string;
 }) => {
   const res = await fetch(`${BASE_URL}/jobs/${id}/pay`, {
     method: "POST",
     cache: "no-store",
     headers: {
-      profile_id: userId.toString(),
+      profile_id: userId,
     },
     body: "Test body",
   });
@@ -110,15 +110,33 @@ export const addBalance = async ({
   userId,
 }: {
   amount: string;
-  userId: number;
+  userId: string;
 }) => {
-  const res = await fetch(`${BASE_URL}/users/deposit/${userId.toString()}`, {
+  const res = await fetch(`${BASE_URL}/users/deposit/${userId}`, {
     method: "POST",
     headers: {
-      profile_id: userId.toString(),
+      profile_id: userId,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ amount }),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.message);
+  }
+
+  return data;
+};
+
+export const getUserUnpaidJobs = async (id: string) => {
+  const res = await fetch(`${BASE_URL}/jobs/unpaid`, {
+    method: "GET",
+    cache: "no-store",
+    headers: {
+      profile_id: id,
+    },
   });
 
   const data = await res.json();

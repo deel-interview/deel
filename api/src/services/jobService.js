@@ -32,7 +32,7 @@ const getTotalUnpaidJobs = async (profileId, options = {}) => {
     transaction: options.transaction,
   });
   const totalUnpaidJobs = jobs.reduce((total, job) => total + job.price, 0);
-  console.log("totalUnpaidJobs: ", totalUnpaidJobs);
+  // console.log("totalUnpaidJobs: ", totalUnpaidJobs);
   return totalUnpaidJobs;
 };
 
@@ -55,7 +55,7 @@ const getAllJobsService = async (profileId, options = {}) => {
     });
     //the transaction will be committed by a higher level function
   } catch (error) {
-    console.error(`An error occurred: ${error.message}`);
+    // console.error(`An error occurred: ${error.message}`);
     throw error;
   }
 };
