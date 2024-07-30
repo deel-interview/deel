@@ -3,6 +3,7 @@ import Home from "../pages/Home";
 import ProtectedRoutes from "./ProtectedRoutes";
 import LoginPage from "../pages/auth/login";
 import Contract from "../pages/Contract";
+import ContractsPage from "../pages/ContractsPage";
 
 const Routing = () => {
   return (
@@ -11,6 +12,7 @@ const Routing = () => {
       <Route element={<ProtectedRoutes />}>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<Home />} />
+        <Route path="/contracts" element={<ContractsPage />} />
         <Route path="/contracts/:id" element={<Contract />} />
       </Route>
     </Routes>

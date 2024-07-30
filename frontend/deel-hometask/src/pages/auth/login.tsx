@@ -55,7 +55,7 @@ const LoginPage = () => {
             <SelectContent>
               <SelectGroup>
                 {allUser.map((user) => (
-                  <SelectItem key={user.id} value={JSON.stringify(user)}>
+                  <SelectItem key={user.id} value={user.id?.toString()!}>
                     {user.firstName} {user.lastName}
                   </SelectItem>
                 ))}

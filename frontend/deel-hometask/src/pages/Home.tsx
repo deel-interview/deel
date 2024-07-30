@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Button, buttonVariants } from "../components/ui/button";
-import { getContracts, getUser } from "../services";
+import { getContracts, getProfileDetails, getUser } from "../services";
 import { ContractTypes, User } from "../types";
 import { toast, Toaster } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
-import { twMerge } from "tailwind-merge";
+
 import { CirclePlus } from "lucide-react";
 import { formatCurrency } from "../lib/utils";
 
@@ -20,27 +20,26 @@ const Home = () => {
     updatedAt: "",
   });
 
-  const [contracts, setContracts] = useState<ContractTypes[]>([]);
-  const [showContracts, setShowContracts] = useState(false);
-
   const navigate = useNavigate();
+
+  const getUserProfile = async (id: string) => {
+    console.log(id);
+    try {
+      const res = await getProfileDetails(id);
+      console.log(res);
+      setCurrentUser(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     const user = getUser();
-    if (user?.id) {
-      setCurrentUser(user);
-    }
-  }, []);
 
-  const contractHandler = async () => {
-    try {
-      const res = await getContracts(currentUser.id!);
-      setContracts(res);
-      setShowContracts(true);
-    } catch (error) {
-      toast.error("Something went wrong");
+    if (user) {
+      getUserProfile(user);
     }
-  };
+  }, [getUserProfile, getUser]);
 
   const handleLogout = () => {
     localStorage.removeItem("deel-user");
@@ -53,7 +52,7 @@ const Home = () => {
       <div className="border rounded-lg p-8 mt-[3rem] max-w-[80rem] w-11/12 mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-2xl font-bold uppercase">
-            Welcome, {currentUser.firstName}
+            Welcome, {currentUser.firstName} {currentUser.lastName}
           </h2>
           <div className="flex items-center gap-2">
             <span className="py-1 px-5 bg-black/30 text-white uppercase rounded-md font-bold">
@@ -85,72 +84,10 @@ const Home = () => {
             </div>
           </h3>
 
-          {!showContracts && (
-            <Button className="mt-8" onClick={contractHandler}>
-              View Contracts
-            </Button>
-          )}
+          <Button className="mt-8" asChild>
+            <Link to="/contracts">View Contracts</Link>
+          </Button>
         </div>
-
-        {showContracts &&
-          (contracts?.length > 0 ? (
-            <div className="mt-12">
-              <h2 className="text-xl font-bold">Your contracts</h2>
-              <table className="w-full mt-4">
-                <thead className="bg-slate-300">
-                  <tr>
-                    <th className="p-2">Date</th>
-
-                    <th className="p-2">Status</th>
-                    <th className="p-2">Term</th>
-                    <th className="p-2">Contractor</th>
-                    {currentUser.type.toLowerCase() !== "client" && (
-                      <th className="p-2">Client</th>
-                    )}
-                    <th className="p-2"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {contracts?.map((contract) => (
-                    <tr className="border-b text-center p-4" key={contract.id}>
-                      <td className="p-2">
-                        {contract.createdAt.split("T")[0]}
-                      </td>
-
-                      <td>{contract.status}</td>
-                      <td>{contract.terms}</td>
-                      <td>
-                        {contract.Contractor.firstName}{" "}
-                        {contract.Contractor.lastName}
-                      </td>
-                      {currentUser.type.toLowerCase() !== "client" && (
-                        <td className="p-2">
-                          {contract.Client.firstName} {contract.Client.lastName}
-                        </td>
-                      )}
-                      <td className="p-4">
-                        <Link
-                          to={`/contracts/${contract.id}`}
-                          className={twMerge(
-                            buttonVariants({ variant: "default" }),
-                            "h-8"
-                          )}
-                        >
-                          View Contract
-                        </Link>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <div className="mt-8">
-              <h2 className="text-neutral-600 italic">
-                You have no active contracts
-              </h2>
-            </div>
-          ))}
       </div>
     </>
   );

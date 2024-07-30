@@ -26,8 +26,8 @@ const Contract = () => {
 
   useEffect(() => {
     const user = getUser();
-    if (user?.id) {
-      setCurrentUser(user);
+    if (user) {
+      // setCurrentUser(user);
     }
   }, []);
 
@@ -69,11 +69,11 @@ const Contract = () => {
       <div className="border rounded-lg p-8 mt-[3rem] max-w-[80rem] w-11/12 mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-2xl font-bold uppercase">
-            Welcome, {currentUser.firstName}
+            {/* Welcome, {currentUser.firstName} {currentUser.lastName} */}
           </h2>
           <div className="flex items-center gap-3">
             <span className="py-1 px-5 bg-black/30 text-white uppercase rounded-md font-bold">
-              {currentUser.type}
+              {/* {currentUser.type} */}
             </span>
             <Button size="sm" className="py-0" onClick={() => navigate(-1)}>
               <ChevronLeft />
@@ -129,9 +129,9 @@ const Contract = () => {
                       <th className="p-2">Paid</th>
                       <th className="p-2">Payment Date</th>
 
-                      {currentUser?.type === "client" && (
+                      {/* {currentUser?.type === "client" && (
                         <th className="p-2"></th>
-                      )}
+                      )} */}
                     </tr>
                   </thead>
                   <tbody>
@@ -143,7 +143,7 @@ const Contract = () => {
                         <td>{formatCurrency(job.price)}</td>
                         <td>{job.paid ? "True" : "False"}</td>
                         <td>{job.paymentDate?.split("T")[0] ?? "N/A"}</td>
-                        {currentUser?.type === "client" && (
+                        {/* {currentUser?.type === "client" && (
                           <td className="p-4">
                             <Button
                               disabled={job.paid ? true : false}
@@ -158,7 +158,7 @@ const Contract = () => {
                               )}
                             </Button>
                           </td>
-                        )}
+                        )} */}
                       </tr>
                     ))}
                   </tbody>

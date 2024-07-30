@@ -9,7 +9,24 @@ export const getProfile = async () => {
     },
   });
   if (!res.ok) {
-    throw new Error("Failed to get contract");
+    throw new Error("Failed to get profile");
+  }
+  const data = await res.json();
+
+  return data;
+};
+
+export const getProfileDetails = async (id: string) => {
+  const res = await fetch(`${BASE_URL}/users/profile`, {
+    method: "GET",
+    cache: "no-store",
+    headers: {
+      profile_id: id,
+    },
+  });
+  // console.log(res);
+  if (!res.ok) {
+    throw new Error("Failed to get profile details");
   }
   const data = await res.json();
 
@@ -18,7 +35,7 @@ export const getProfile = async () => {
 
 export const getUser = () => {
   const isUser = localStorage.getItem("deel-user");
-  return isUser && JSON.parse(isUser);
+  return isUser && isUser;
 };
 
 export const getContracts = async (id: number) => {
