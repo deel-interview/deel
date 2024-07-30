@@ -118,6 +118,7 @@ const payForJobService = async (jobId, clientId) => {
     client.balance = clientBalance - parseFloat(job.price);
     contractor.balance = contractorBalance + parseFloat(job.price);
     job.paid = true;
+    job.paymentDate = Date.now();
 
     await Promise.all([
       client.save({ transaction }),
@@ -126,7 +127,7 @@ const payForJobService = async (jobId, clientId) => {
     ]);
 
     await transaction.commit();
-    return { success: true };
+    return { data: job, success: true, date: job.paymentDate };
   } catch (error) {
     await transaction.rollback();
     console.error(`An error occurred: ${error.message}`);

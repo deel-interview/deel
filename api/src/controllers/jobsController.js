@@ -49,7 +49,7 @@ const payForJob = async (req, res) => {
     if (result.error) {
       return res.status(400).json({ message: result.error });
     }
-    res.json({ message: "Payment successful" });
+    res.json({ data: result.data, message: "Payment successful" });
   } catch (error) {
     console.error("error: ", error);
     res.status(500).json({ message: error.message });
