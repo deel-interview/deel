@@ -79,7 +79,7 @@ const getSingleProfiles = async (req, res) => {
   try {
     const profiles = await getProfileService(profile.id, { transaction });
     // console.log("profiles: ", profiles);
-    if (!profiles.length) {
+    if (!profiles.id) {
       await transaction.commit();
       return res.status(404).json({ message: "No unpaid profiles found" });
     }
