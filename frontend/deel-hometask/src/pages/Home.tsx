@@ -3,9 +3,10 @@ import { Button, buttonVariants } from "../components/ui/button";
 import { getContracts, getUser } from "../services";
 import { ContractTypes, User } from "../types";
 import { toast, Toaster } from "sonner";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
-import { CirclePlus, Ghost } from "lucide-react";
+import { CirclePlus } from "lucide-react";
+import { formatCurrency } from "../lib/utils";
 
 const Home = () => {
   const [currentUser, setCurrentUser] = useState<User>({
@@ -21,6 +22,8 @@ const Home = () => {
 
   const [contracts, setContracts] = useState<ContractTypes[]>([]);
   const [showContracts, setShowContracts] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const user = getUser();
@@ -39,17 +42,24 @@ const Home = () => {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("deel-user");
+    navigate("/login");
+  };
+
   return (
     <>
-      <Toaster position="top-right" />
-      <div className="border rounded-lg p-8 mt-[3rem] max-w-[60rem] w-11/12 mx-auto">
+      <Toaster position="top-right" richColors />
+      <div className="border rounded-lg p-8 mt-[3rem] max-w-[80rem] w-11/12 mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl font-bold uppercase">Welcome</h2>
-          <div>
-            <span className="py-1 px-5 bg-black/50 text-white uppercase rounded-md font-bold">
+          <h2 className="text-2xl font-bold uppercase">
+            Welcome, {currentUser.firstName}
+          </h2>
+          <div className="flex items-center gap-2">
+            <span className="py-1 px-5 bg-black/30 text-white uppercase rounded-md font-bold">
               {currentUser.type}
             </span>
-            <Button size="sm" className="py-0">
+            <Button size="sm" className="py-0" onClick={handleLogout}>
               Logout
             </Button>
           </div>
@@ -64,7 +74,9 @@ const Home = () => {
           <h3 className="grid grid-cols-[8rem,1fr] gap-3">
             <span className="font-semibold">Balance :</span>{" "}
             <div className="capitalize flex items-center gap-8">
-              <span className="text-xl">${currentUser.balance}</span>{" "}
+              <span className="text-xl">
+                {formatCurrency(currentUser.balance!)}
+              </span>{" "}
               {currentUser?.type?.toLowerCase() === "client" && (
                 <Button className="py-0 px-3 h-7" size="sm" variant="ghost">
                   <CirclePlus />
@@ -92,6 +104,9 @@ const Home = () => {
                     <th className="p-2">Status</th>
                     <th className="p-2">Term</th>
                     <th className="p-2">Contractor</th>
+                    {currentUser.type.toLowerCase() !== "client" && (
+                      <th className="p-2">Client</th>
+                    )}
                     <th className="p-2"></th>
                   </tr>
                 </thead>
@@ -108,6 +123,11 @@ const Home = () => {
                         {contract.Contractor.firstName}{" "}
                         {contract.Contractor.lastName}
                       </td>
+                      {currentUser.type.toLowerCase() !== "client" && (
+                        <td className="p-2">
+                          {contract.Client.firstName} {contract.Client.lastName}
+                        </td>
+                      )}
                       <td className="p-4">
                         <Link
                           to={`/contracts/${contract.id}`}

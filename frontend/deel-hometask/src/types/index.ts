@@ -16,11 +16,14 @@ interface Person {
 }
 
 interface Job {
-  id: number;
+  ContractId: number;
+  createdAt: string;
   description: string;
-  price: number;
-  paid: boolean | null;
+  id: number;
+  paid: true | null;
   paymentDate: string | null;
+  price: number;
+  updatedAt: string;
 }
 
 export interface ContractTypes {
