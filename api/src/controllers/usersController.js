@@ -1,5 +1,8 @@
 const { depositMoneyService } = require("../services/balanceService");
-const { getAllProfileService } = require("../services/usersService");
+const {
+  getAllProfileService,
+  getProfileService,
+} = require("../services/usersService");
 const { sequelize } = require("../models/model");
 const Sequelize = require("sequelize");
 //TODO: Do Validations on every request to all the controllers
@@ -67,4 +70,26 @@ const getProfiles = async (req, res) => {
   }
 };
 
-module.exports = { depositMoney, getProfiles };
+const getSingleProfiles = async (req, res) => {
+  const profile = req.profile.dataValues;
+  const transaction = await sequelize.transaction({
+    isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.SERIALIZABLE,
+  });
+
+  try {
+    const profiles = await getProfileService(profile.id, { transaction });
+    // console.log("profiles: ", profiles);
+    if (!profiles.length) {
+      await transaction.commit();
+      return res.status(404).json({ message: "No unpaid profiles found" });
+    }
+    await transaction.commit();
+    res.json(profiles);
+  } catch (error) {
+    console.error("error: ", error);
+    await transaction.rollback();
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { depositMoney, getProfiles, getSingleProfiles };
